@@ -7,10 +7,18 @@ import socket from "./Socket";
 
 function App() {
   useEffect(() => {
+    console.log("efeqti");
+
     socket.on("message_received", (msg) => {
-      console.log(msg);
+      console.log("movida frontze: ", msg);
     });
   }, []);
+
+  [
+    { name: "beqa", jeria: false },
+    { name: "dato", jeria: false },
+    { name: "gio", jeria: true },
+  ];
 
   return (
     <>

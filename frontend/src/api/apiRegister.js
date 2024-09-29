@@ -3,10 +3,7 @@ import socket from "../Socket";
 
 export async function registerUser(username) {
   try {
-    console.log("aqav");
-
-    socket.emit("message", { message: "ravaxar" });
-    console.log("xoara");
+    socket.emit("message", { message: username });
   } catch (error) {
     console.log(error.message);
   }

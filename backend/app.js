@@ -15,7 +15,8 @@ io.on("connection", (socket) => {
   console.log("user connected to: ", socket.id);
 
   socket.on("message", (msg) => {
-    socket.emit("message_received", { message: "ukukavshir" });
-    console.log(msg.message);
+    console.log("user created: ", msg);
+
+    socket.broadcast.emit("message_received", { message: "ukukavshir" });
   });
 });
