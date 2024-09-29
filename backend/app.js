@@ -19,4 +19,12 @@ io.on("connection", (socket) => {
 
     socket.broadcast.emit("message_received", { message: "ukukavshir" });
   });
+
+  socket.on("joinGame", (tableCode, username) => {
+    socket.join(tableCode);
+
+    socket.to(tableCode).emit("message_received", {
+      message: `ახალი მოთამაშე შემოვიდა ${username}`,
+    });
+  });
 });

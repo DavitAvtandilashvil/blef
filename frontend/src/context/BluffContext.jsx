@@ -1,10 +1,26 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
 const BluffContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export function BluffContextProvider({ children }) {
-  return <BluffContext.Provider value={{}}>{children}</BluffContext.Provider>;
+  const [actions, setActions] = useState([]);
+  const [tableCode, setTableCode] = useState("");
+  const [username, setUsername] = useState("");
+  return (
+    <BluffContext.Provider
+      value={{
+        actions,
+        setActions,
+        tableCode,
+        setTableCode,
+        username,
+        setUsername,
+      }}
+    >
+      {children}
+    </BluffContext.Provider>
+  );
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

@@ -1,9 +1,20 @@
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
+import { useBluff } from "./context/BluffContext";
 
 function AppLayout() {
+  const { actions } = useBluff();
   return (
     <StyledApp>
+      <TableInfo>
+        {actions?.map((item, index) => {
+          return (
+            <p style={{ color: "red" }} key={index}>
+              {item}
+            </p>
+          );
+        })}
+      </TableInfo>
       <Table>
         <Outlet />
       </Table>
@@ -36,4 +47,15 @@ const Table = styled.div`
   font-weight: bold;
   text-align: center;
   transition: transform 0.3s ease;
+`;
+
+const TableInfo = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  height: 150px;
+  border-radius: 10px;
+  background-color: white;
+  overflow-y: auto;
 `;

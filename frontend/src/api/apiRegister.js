@@ -1,4 +1,3 @@
-import axiosInstance from "../../api";
 import socket from "../Socket";
 
 export async function registerUser(username) {

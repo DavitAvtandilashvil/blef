@@ -1,8 +1,19 @@
-import { useState } from "react";
 import { registerUser } from "../api/apiRegister";
+import { useBluff } from "../context/BluffContext";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const [username, setUsername] = useState("");
+  const { setActions } = useBluff();
+  const navigate = useNavigate();
+
+  const { username, setUsername } = useBluff();
+
+  const handleEnter = (username) => {
+    registerUser(username);
+    setActions((action) => [...action, `${username} join`]);
+    navigate("/preGame");
+  };
+
   return (
     <div style={{ display: "flex", gap: "30px" }}>
       <p>სახელი:</p>
@@ -11,7 +22,7 @@ function Register() {
         onChange={(e) => setUsername(e.target.value)}
         value={username}
       />
-      <button onClick={() => registerUser(username)}>ენთერი</button>
+      <button onClick={() => handleEnter(username)}>ენთერი</button>
     </div>
   );
 }
