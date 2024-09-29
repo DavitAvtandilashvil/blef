@@ -10,17 +10,16 @@ function CreateOrJoinGame() {
   const [joinCode, setJoinCode] = useState("");
   const tableCode = generateRandomString();
   const navigate = useNavigate();
-  const { setTableCode, username } = useBluff();
+  const { setTableCode, username, setActions } = useBluff();
 
   const handleJoin = () => {
-    socket.emit("joinGame", joinCode, username);
-    setTableCode(joinCode);
-    navigate(`/game/${joinCode}`);
+    socket.emit("joinGame", joinCode, username, "JOIN");
   };
 
   const handleCreate = () => {
     setCreate(true);
-    socket.emit("joinGame", tableCode, username);
+    socket.emit("joinGame", tableCode, username, "CREATE");
+    setActions((actions) => [...actions, `${username} დაკავშირდა`]);
     setTableCode(tableCode);
     navigate(`/game/${tableCode}`);
   };

@@ -11,20 +11,33 @@ const io = require("socket.io")(server, {
   cors: { origin: "*" },
 });
 
+const games = {};
+
 io.on("connection", (socket) => {
-  console.log("user connected to: ", socket.id);
+  console.log("new socket: ", socket.id);
 
-  socket.on("message", (msg) => {
-    console.log("user created: ", msg);
+  socket.on("joinGame", (tableCode, username, type) => {
+    if (type == "JOIN") {
+      if (games[tableCode]) {
+        socket.join(tableCode);
 
-    socket.broadcast.emit("message_received", { message: "ukukavshir" });
-  });
+        io.to(socket.id).emit("clientJoin", tableCode, username);
 
-  socket.on("joinGame", (tableCode, username) => {
-    socket.join(tableCode);
+        socket.to(tableCode).emit("message_received", {
+          message: `${username} დაკავშირდა`,
+        });
+      } else {
+        io.to(socket.id).emit("message_received", {
+          message: `ოთახი არ არსებობს`,
+        });
+      }
+    } else {
+      games[tableCode] = {};
+      socket.join(tableCode);
 
-    socket.to(tableCode).emit("message_received", {
-      message: `ახალი მოთამაშე შემოვიდა ${username}`,
-    });
+      socket.to(tableCode).emit("message_received", {
+        message: `${username} დაკავშირდა`,
+      });
+    }
   });
 });

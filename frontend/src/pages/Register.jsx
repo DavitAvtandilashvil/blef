@@ -1,16 +1,12 @@
-import { registerUser } from "../api/apiRegister";
 import { useBluff } from "../context/BluffContext";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const { setActions } = useBluff();
   const navigate = useNavigate();
 
   const { username, setUsername } = useBluff();
 
-  const handleEnter = (username) => {
-    registerUser(username);
-    setActions((action) => [...action, `${username} join`]);
+  const handleEnter = () => {
     navigate("/preGame");
   };
 

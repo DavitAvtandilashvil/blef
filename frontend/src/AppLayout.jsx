@@ -1,9 +1,33 @@
 import styled from "styled-components";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useBluff } from "./context/BluffContext";
+import { useEffect } from "react";
+import socket from "./Socket";
 
 function AppLayout() {
   const { actions } = useBluff();
+  const { setActions } = useBluff();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleMessage = (msg) => {
+      setActions((action) => [...action, msg.message]);
+    };
+
+    const handleClientJoin = (tableCode, username) => {
+      navigate(`/game/${tableCode}`);
+      setActions((actions) => [...actions, `${username} დაკავშირდა`]);
+    };
+
+    socket.on("message_received", handleMessage);
+
+    socket.on("clientJoin", handleClientJoin);
+
+    return () => {
+      socket.off("message_received", handleMessage);
+      socket.off("clientJoin", handleClientJoin);
+    };
+  }, [navigate, setActions]);
   return (
     <StyledApp>
       <TableInfo>
