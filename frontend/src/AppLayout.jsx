@@ -6,7 +6,7 @@ import socket from "./Socket";
 
 function AppLayout() {
   const { actions } = useBluff();
-  const { setActions } = useBluff();
+  const { setActions, setGameData } = useBluff();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,15 +19,25 @@ function AppLayout() {
       setActions((actions) => [...actions, `${username} დაკავშირდა`]);
     };
 
-    socket.on("message_received", handleMessage);
+    const handleAddUser = (data) => {
+      setGameData(data);
+    };
+    const handleAddUserForMe = (data) => {
+      setGameData(data);
+    };
 
+    socket.on("message_received", handleMessage);
     socket.on("clientJoin", handleClientJoin);
+    socket.on("addUser", handleAddUser);
+    socket.on("addUserForMe", handleAddUserForMe);
 
     return () => {
       socket.off("message_received", handleMessage);
       socket.off("clientJoin", handleClientJoin);
+      socket.off("addUser", handleAddUser);
+      socket.off("addUserForMe", handleAddUserForMe);
     };
-  }, [navigate, setActions]);
+  }, [navigate, setActions, setGameData]);
   return (
     <StyledApp>
       <TableInfo>

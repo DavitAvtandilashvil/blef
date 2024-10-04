@@ -12,6 +12,7 @@ const io = require("socket.io")(server, {
 });
 
 const games = {};
+console.log(games);
 
 io.on("connection", (socket) => {
   console.log("new socket: ", socket.id);
@@ -26,18 +27,40 @@ io.on("connection", (socket) => {
         socket.to(tableCode).emit("message_received", {
           message: `${username} დაკავშირდა`,
         });
+
+        const newUser = {
+          username,
+          tableCode,
+          coins: 2,
+          cardUnit: 2,
+        };
+        games[tableCode].users.push(newUser);
+        console.log(games[tableCode]);
+
+        io.to(socket.id).emit("addUserForMe", games[tableCode]);
+        socket.to(tableCode).emit("addUser", games[tableCode]);
       } else {
         io.to(socket.id).emit("message_received", {
           message: `ოთახი არ არსებობს`,
         });
       }
     } else {
-      games[tableCode] = {};
-      socket.join(tableCode);
+      const newUser = {
+        username,
+        tableCode,
+        coins: 2,
+        cardUnit: 2,
+      };
+      games[tableCode] = { users: [newUser] };
+      console.log(games[tableCode]);
 
+      socket.join(tableCode);
       socket.to(tableCode).emit("message_received", {
         message: `${username} დაკავშირდა`,
       });
+
+      io.to(socket.id).emit("addUserForMe", games[tableCode]);
+      socket.to(tableCode).emit("addUser", games[tableCode]);
     }
   });
 });

@@ -7,6 +7,8 @@ export function BluffContextProvider({ children }) {
   const [actions, setActions] = useState([]);
   const [tableCode, setTableCode] = useState("");
   const [username, setUsername] = useState("");
+  const [gameData, setGameData] = useState({});
+  console.log(gameData);
   return (
     <BluffContext.Provider
       value={{
@@ -16,6 +18,8 @@ export function BluffContextProvider({ children }) {
         setTableCode,
         username,
         setUsername,
+        gameData,
+        setGameData,
       }}
     >
       {children}
